@@ -66,24 +66,32 @@ void list_delete(int value) {
 struct node *remove;
 remove = head;
 
-if((*head).key == value){
-    head = (*head).next;
-    free(remove);
-}
 
+        while((*remove).key == value){
+            if((*head).next != NULL){
+                head = (*head).next;
+                free(remove);
 
-    while((*remove).next!=NULL){
-        struct node *pop = NULL;
+                remove = head;
+                }
+        }
+
+struct node *pop = NULL;
+
+    while((*remove).next != NULL){
+
         pop = remove;
         remove = (*remove).next;
 
         if((*remove).key == value){
             (*pop).next = (*remove).next;
             free(remove);
+            remove = pop;
         }
 
+    }
 }
-}
+
 
 unsigned int list_size() {
 
