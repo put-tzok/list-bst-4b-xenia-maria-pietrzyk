@@ -5,7 +5,7 @@
 #include <time.h>
 
 
-unsigned int ns[] = { 10, /* TODO: fill values which will be used as lists' sizes */ };
+unsigned int ns[1];
 
 // each list node contains an integer key value and pointer to next list node
 struct node {
@@ -39,26 +39,24 @@ struct node* list_insert(int value) {
    }
 (*last).next = new_component;
 
-    return NULL;
+    return new_component;
 }}
 
 
 struct node* list_search(int value) {
     struct node *finder;
     finder = head;
-    int quantity = 0;
+
     while((*finder).next != NULL){
 
         if((*finder).key == value){
-            quantity++;
-            printf("%d ", (*finder).key);
+
+            return finder;
             }
         finder = (*finder).next;
 
     }
-    printf("W liscie znajduje sie %d elementow o podanej wartosci", quantity);
 
-    return NULL;
 }
 
 void list_delete(int value) {
