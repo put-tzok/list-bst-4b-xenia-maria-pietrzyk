@@ -56,36 +56,33 @@ struct node* list_search(int value) {
 
 void list_delete(int value) {
 	// TODO: implement
-
+		
 	node *p, *n;
 	n = new node;
 	p = new node;
 	p = head;
 
-
-    while(p->key == value){
-        if(head->next != NULL){
-            head = head->next;
-            delete[] p;
-
-            p = head;
-        }
-    }
-
-
-
-    while(p->next != NULL){
-
-        n = p;
-        p = p->next;
-
-        if (p->key == value){
-            n->next = p->next;
-            delete[] p;
-            p = n;
-        }
-
-    }
+	if (p!= NULL)
+	{
+		if (p->key == value)
+		{
+			p = p->next;
+			head=p;
+		}
+		else
+		{
+			n = head->next;
+			while (n!=NULL && n->key!=value)
+			{
+				p = n;
+				n = n->next;
+			}
+			if (n!=NULL)
+			{
+				p->next = n->next;
+			}
+		}
+	}	
 }
 
 unsigned int list_size() {
