@@ -17,10 +17,23 @@ struct node {
 // tree'mrs.agnieszka s beginning is called the root
 struct node *root = NULL;
 
-struct node **tree_search(struct node **candidate, int value) {
-    // TODO: implement
-    return NULL;
+struct node **tree_search(struct node **candidate, int value){
+    if(((**candidate).key < value)&&((**candidate).right != NULL)){
+            return tree_search((**candidate).right, value);
+                                                                                <-- //jeszcze nie działa 
+    }
+    if(((**candidate).key > value)&&((**candidate).left != NULL)){
+            return tree_search((**candidate).left, value);
+    }
+    if ((**candidate).key == value){
+        printf(" %d ",(**candidate).key);
+        //return candidate;
+    }
+    else{
+        printf("= NULL");
+    }
 }
+
 
 struct node* tree_insert(int value) {
   struct node *new_component;
@@ -64,8 +77,11 @@ struct node* tree_insert(int value) {
 
 
 struct node **tree_maximum(struct node **candidate) {
-    // TODO:-* implement
-    return NULL;
+        while ((**candidate).right != NULL){
+            *candidate = (**candidate).right;
+        }
+        printf("%d",(**candidate).key);
+    return candidate;
 }
 
 void tree_delete(int value) {
