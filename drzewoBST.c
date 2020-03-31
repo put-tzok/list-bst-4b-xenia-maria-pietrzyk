@@ -85,7 +85,43 @@ struct node **tree_maximum(struct node **candidate) {
 }
 
 void tree_delete(int value) {
-    // TODO: implement
+
+    struct node **nodeptr = tree_search(&root, value);
+    struct node **nodeptr2 = tree_search(&root, value);
+
+    if(((**nodeptr).left == NULL) && ((**nodeptr).right == NULL)){
+        *nodeptr = NULL;
+        free(*nodeptr);
+    }
+    else if(((**nodeptr).left == NULL) && (**nodeptr).right != NULL){
+        struct node *component = (**nodeptr).right;
+        free(*nodeptr2);
+        *nodeptr = component;
+
+
+     }
+    else if(((**nodeptr).left != NULL) && (**nodeptr).right == NULL){
+
+        struct node *component = (**nodeptr).left;
+        free(*nodeptr2);
+        *nodeptr = component;
+}
+    else if(((**nodeptr).left != NULL) && (**nodeptr).right != NULL){
+        struct node **maxnodeptr = tree_maximum(&(**nodeptr).left);
+
+       (**nodeptr).key = (**maxnodeptr).key;
+
+
+       if((**maxnodeptr).left != NULL){
+
+        struct node *component = (**maxnodeptr).left;
+        struct node *maxnodeptr2 = *maxnodeptr;
+        free(maxnodeptr2);
+        *maxnodeptr = component;
+        }
+
+
+    }
 }
 
 int count(struct node *element, unsigned int *t){
