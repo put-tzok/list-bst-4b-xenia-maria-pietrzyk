@@ -20,13 +20,12 @@ struct node *root = NULL;
 struct node **tree_search(struct node **candidate, int value){
     if(((**candidate).key < value)&&((**candidate).right != NULL)){
             return tree_search(&(**candidate).right, value);
-                                                                                
+
     }
     if(((**candidate).key > value)&&((**candidate).left != NULL)){
             return tree_search(&(**candidate).left, value);
     }
     if ((**candidate).key == value){
-        printf(" %d ",(**candidate).key);
         return candidate;
     }
     else{
@@ -80,7 +79,6 @@ struct node **tree_maximum(struct node **candidate) {
         while ((**candidate).right != NULL){
             *candidate = (**candidate).right;
         }
-        printf("%d",(**candidate).key);
     return candidate;
 }
 
@@ -130,8 +128,6 @@ int count(struct node *element, unsigned int *t){
 
     struct node *element_left = element;
     struct node *element_right = element;
-
-    printf(" %d ",(*element).key);
 
     if((((*element_left).left != NULL))||((*element_right).right != NULL)){
         if((*element_left).left != NULL){
@@ -252,8 +248,75 @@ void insert_random(int *t, int n) {
     }
 }
 
+void heapify(int A[], int n, int i)
+{
+    int largest = i;
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+
+
+
+    if (l < n && A[l] > A[largest])
+        largest = l;
+
+    if (r < n && A[r] > A[largest])
+        largest = r;
+
+    if (largest != i)
+    {
+
+        int w = A[i];
+        A[i] = A[largest];
+        A[largest] = w;
+
+
+        heapify(A, n, largest);
+    }
+}
+
+
+void heapSort(int A[], int n)
+{
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(A, n, i);
+
+    for (int i=n-1; i>=0; i--)
+    {
+
+        int w = A[0];
+        A[0] = A[i];
+        A[i] = w;
+
+        heapify(A, i, 0);
+    }
+}
+
+
+
+
+void tree_insert_biject(int *t, int p, int r){
+    if (p == r){
+        tree_insert(t[p]);
+    }
+    if (r-p == 1){
+        tree_insert(t[p]);
+        tree_insert(t[r]);
+    }
+    else{
+        int q = p + (r - p)/2;
+        tree_insert(t[q]);
+        tree_insert_biject(t, p, q-1);
+        tree_insert_biject(t, q+1, r);
+    }
+}
+
+
 void insert_binary(int *t, int n) {
-    // TODO: implement
+
+    heapSort(t, n);
+    tree_insert_biject(t, 0, n-1);
+
+
 }
 
 char *insert_names[] = { "Increasing", "Random", "Binary" };
