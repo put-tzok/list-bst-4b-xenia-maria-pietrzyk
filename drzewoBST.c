@@ -25,12 +25,10 @@ struct node **tree_search(struct node **candidate, int value){
     if(((**candidate).key > value)&&((**candidate).left != NULL)){
             return tree_search(&(**candidate).left, value);
     }
-    if ((**candidate).key == value){
+   // if ((**candidate).key == value){
         return candidate;
-    }
-    else{
-        return NULL;
-    }
+    //}
+
 }
 
 
@@ -62,11 +60,11 @@ struct node* tree_insert(int value) {
             }
             else if((*struct_operational).key >= value){
                 (*struct_operational).left = new_component;
-                return 0;
+                return new_component;
                 }
             else{
                 (*struct_operational).right = new_component;
-                return 0;
+                return new_component;
             }
             }
 
@@ -87,6 +85,7 @@ void tree_delete(int value) {
     struct node **nodeptr = tree_search(&root, value);
     struct node **nodeptr2 = tree_search(&root, value);
 
+if((**nodeptr).key == value){
     if(((**nodeptr).left == NULL) && ((**nodeptr).right == NULL)){
         *nodeptr = NULL;
         free(*nodeptr);
@@ -117,17 +116,26 @@ void tree_delete(int value) {
         free(maxnodeptr2);
         *maxnodeptr = component;
         }
+        else{
+        struct node *maxnodeptr2 = *maxnodeptr;
+
+        free(maxnodeptr2);
+        *maxnodeptr = NULL;
+
+        }
 
 
     }
+    }
 }
-
 int count(struct node *element, unsigned int *t){
 
 
 
     struct node *element_left = element;
     struct node *element_right = element;
+
+
 
     if((((*element_left).left != NULL))||((*element_right).right != NULL)){
         if((*element_left).left != NULL){
@@ -248,6 +256,7 @@ void insert_random(int *t, int n) {
     }
 }
 
+
 void heapify(int A[], int n, int i)
 {
     int largest = i;
@@ -337,7 +346,7 @@ int main(int argc, char **argv) {
             clock_t insertion_time = clock();
             insert(t, n);
             insertion_time = clock() - insertion_time;
-
+//exit(0);
             assert(tree_size(root) == n);       // after all insertions, tree size must be `n`
             assert(is_bst(root));               // after all insertions, tree must be valid BST
 
@@ -359,10 +368,13 @@ int main(int argc, char **argv) {
 
             // delete every element in the order present in array `t`
             for (unsigned int l = 0, m = n; l < n; l++, m--) {
+         //       printf("----%d----",m);
                 assert(tree_size(root) == m);   // tree size must be equal to the expected value
                 tree_delete(t[l]);
-                assert(is_bst(root));           // after deletion, tree must still be valid BST
+                assert(is_bst(root));
+                //printf("tree size: %d",tree_size(root));      // after deletion, tree must still be valid BST
             }
+            //printf("size after: %d",tree_size(root));
             assert(tree_size(root) == 0);       // after all deletions, tree has size zero
 
             free(root);
@@ -373,6 +385,7 @@ int main(int argc, char **argv) {
                     insert_names[i],
                     (double)insertion_time / CLOCKS_PER_SEC,
                     (double)search_time / CLOCKS_PER_SEC);
+
         }
     }
     return 0;
