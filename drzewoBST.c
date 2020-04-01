@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
-
-unsigned int ns[] = { 10, 100, 200, 400, 500, 1000, 1500, 3000, 4000, 8000 };
+#include <unistd.h>
+unsigned int ns[] = {47};
 
 // each tree node contains an integer key and pointers to left and right children nodes
 struct node {
@@ -31,7 +31,20 @@ struct node **tree_search(struct node **candidate, int value){
 
 }
 
+void display_tree(struct node* nod)
+{
+if(nod!=NULL)
+{
+if(nod->left==NULL & nod->right==NULL) printf("[%d;;]",nod->key);
+if(nod->left==NULL & nod->right!=NULL) printf("[%d;;%d]",nod->key,nod->right->key);
+if(nod->left!=NULL & nod->right==NULL) printf("[%d;%d;]",nod->key,nod->left->key);
+if(nod->left!=NULL & nod->right!=NULL) printf("[%d;%d;%d]",nod->key,nod->left->key,nod->right->key);
 
+display_tree(nod->left);
+display_tree(nod->right);
+}
+
+}
 struct node* tree_insert(int value) {
   struct node *new_component;
   new_component = (struct node*) malloc(sizeof(struct node));
@@ -74,11 +87,13 @@ struct node* tree_insert(int value) {
 
 
 struct node **tree_maximum(struct node **candidate) {
-        while ((**candidate).right != NULL){
-            *candidate = (**candidate).right;
+        if((**candidate).right != NULL){
+           return tree_maximum(&(**candidate).right);
         }
+
     return candidate;
 }
+
 
 void tree_delete(int value) {
 
@@ -134,6 +149,7 @@ int count(struct node *element, unsigned int *t){
 
     struct node *element_left = element;
     struct node *element_right = element;
+
 
 
 
@@ -252,8 +268,11 @@ void insert_increasing(int *t, int n) {
 void insert_random(int *t, int n) {
     shuffle(t, n);
     for (int i = 0; i < n; i++) {
+        //printf("   %d   ",t[i]);
+ //       sleep(1);
         tree_insert(t[i]);
-    }
+    };;
+//exit(0);
 }
 
 
@@ -332,6 +351,7 @@ char *insert_names[] = { "Increasing", "Random", "Binary" };
 void (*insert_functions[])(int*, int) = { insert_increasing, insert_random, insert_binary };
 
 int main(int argc, char **argv) {
+srand(time(NULL));
     for (unsigned int i = 0; i < sizeof(insert_functions) / sizeof(*insert_functions); i++) {
         void (*insert)(int*, int) = insert_functions[i];
 
@@ -368,13 +388,18 @@ int main(int argc, char **argv) {
 
             // delete every element in the order present in array `t`
             for (unsigned int l = 0, m = n; l < n; l++, m--) {
-         //       printf("----%d----",m);
+
                 assert(tree_size(root) == m);   // tree size must be equal to the expected value
+             //   display_tree(root);
+             //   printf("\n");
                 tree_delete(t[l]);
+             //   printf("TS:%d; m:%d; l:%d; n:%d;del:%d\n",tree_size(root),m-1,l,n,t[l]);
+             // printf("\n");
+            //  display_tree(root);
+            //  printf("\n");
                 assert(is_bst(root));
-                //printf("tree size: %d",tree_size(root));      // after deletion, tree must still be valid BST
+                     // after deletion, tree must still be valid BST
             }
-            //printf("size after: %d",tree_size(root));
             assert(tree_size(root) == 0);       // after all deletions, tree has size zero
 
             free(root);
