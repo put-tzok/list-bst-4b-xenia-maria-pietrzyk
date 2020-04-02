@@ -5,7 +5,7 @@
 #include <signal.h>
 #include <time.h>
 #include <unistd.h>
-unsigned int ns[] = {47};
+unsigned int ns[] = {10, 100, 200, 400, 500, 1000, 1500, 3000, 4000, 8000};
 
 // each tree node contains an integer key and pointers to left and right children nodes
 struct node {
@@ -326,7 +326,7 @@ void tree_insert_biject(int *t, int p, int r){
     if (p == r){
         tree_insert(t[p]);
     }
-    if (r-p == 1){
+    else if (r-p == 1){
         tree_insert(t[p]);
         tree_insert(t[r]);
     }
