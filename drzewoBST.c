@@ -5,7 +5,7 @@
 #include <signal.h>
 #include <time.h>
 #include <unistd.h>
-unsigned int ns[] = {10, 100, 200, 400, 500, 1000, 1500, 3000, 4000, 8000};
+unsigned int ns[] = {1000 ,2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000};
 
 // each tree node contains an integer key and pointers to left and right children nodes
 struct node {
@@ -350,6 +350,9 @@ void insert_binary(int *t, int n) {
 char *insert_names[] = { "Increasing", "Random", "Binary" };
 void (*insert_functions[])(int*, int) = { insert_increasing, insert_random, insert_binary };
 
+#define REPEATS 100
+
+
 int main(int argc, char **argv) {
 srand(time(NULL));
     for (unsigned int i = 0; i < sizeof(insert_functions) / sizeof(*insert_functions); i++) {
@@ -364,9 +367,28 @@ srand(time(NULL));
 
             // insert data using one of methods
             clock_t insertion_time = clock();
+          //  for(int i=0; i<REPEATS; i++){
             insert(t, n);
+           // }
             insertion_time = clock() - insertion_time;
 //exit(0);
+int a = tree_size(root);
+           for (unsigned int l = 0, g = a; l < a; l++, g--) {
+
+
+                assert(tree_size(root) == g);   // tree size must be equal to the expected value
+             //   display_tree(root);
+             //   printf("\n");
+                tree_delete(t[l]);
+             //   printf("TS:%d; m:%d; l:%d; n:%d;del:%d\n",tree_size(root),m-1,l,n,t[l]);
+             // printf("\n");
+            //  display_tree(root);
+            //  printf("\n");
+            //    assert(is_bst(root));
+                     // after deletion, tree must still be valid BST
+            }
+            insert(t, n);
+
             assert(tree_size(root) == n);       // after all insertions, tree size must be `n`
             assert(is_bst(root));               // after all insertions, tree must be valid BST
 
@@ -375,12 +397,13 @@ srand(time(NULL));
 
             // search for every element in the order present in array `t`
             clock_t search_time = clock();
+            for(int i=0; i<REPEATS; i++){
             for (unsigned int k = 0; k < n; k++) {
                 struct node **pnode = tree_search(&root, t[k]);
                 struct node *iter = *pnode;
                 assert(iter != NULL);           // found element cannot be NULL
                 assert(iter->key == t[k]);      // found element must contain the expected value
-            }
+            }}
             search_time = clock() - search_time;
 
             // reorder array elements before deletion
@@ -408,8 +431,8 @@ srand(time(NULL));
             printf("%d\t%s\t%f\t%f\n",
                     n,
                     insert_names[i],
-                    (double)insertion_time / CLOCKS_PER_SEC,
-                    (double)search_time / CLOCKS_PER_SEC);
+                    (double)insertion_time / CLOCKS_PER_SEC/REPEATS,
+                    (double)search_time / CLOCKS_PER_SEC/REPEATS);
 
         }
     }
